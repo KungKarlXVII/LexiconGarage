@@ -39,15 +39,7 @@ public class UI {
                         break;
 
 
-                    /* BREAK */
-//                    case "5":
-//                        System.out.println("Save inventory");
-//                        handler.saveInventory();
-//                        break;
-//                    case "6":
-//                        System.out.println("Load inventory");
-//                        handler.loadInventory();
-//                        break;
+
 
                     case "7":
                         System.out.println("List all known vehicles");
@@ -78,7 +70,7 @@ public class UI {
             } while(isRunning);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error: Something went wrong... " + e.getMessage() + ".");
         }
 
         handler.saveInventory();

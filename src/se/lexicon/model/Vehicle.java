@@ -17,7 +17,7 @@ public abstract class Vehicle implements Serializable {
         this.model = model;
         this.numberOfWheels = 0;
         this.numberOfRegistration = "unavailable";
-        this.type = VehicleType.UNKNOWN;
+        this.type = null;
         isParked = false;
     }
 
@@ -90,10 +90,9 @@ public abstract class Vehicle implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Vehicle : ");
+        StringBuilder sb = new StringBuilder("Vehicle : " + type + " - ");
         sb.append(brand + " " + model);
         sb.append(", reg. no: " + numberOfRegistration);
-        sb.append(", parking status: " + isParked);
         return sb.toString();
     }
 }

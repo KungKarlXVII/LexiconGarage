@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Garage implements Serializable {
+
+    private static final long serialVersionUID = 5661669814670995975L;
 
     private Integer garageLimit;
     private String location;
@@ -21,8 +24,21 @@ public class Garage implements Serializable {
         return garageLimit;
     }
 
-    public void setGarageLimit(Integer garageLimit) {
-        this.garageLimit = garageLimit;
+    public void setGarageLimit(Integer newGarageLimit) {
+        if(newGarageLimit <= 0) {
+            System.out.println("Error: I'm sorry that is not possible.");
+            return;
+        }
+        if(this.garageLimit == newGarageLimit) {
+            System.out.println("Error: Garage already have " + newGarageLimit + "parking spots.");
+            return;
+        }
+        if(newGarageLimit < this.parkedVehicles.size()) {
+            System.out.println("Error: I cant let you destroy the vehicles parked inside.");
+            return;
+        }
+        this.garageLimit = newGarageLimit;
+        System.out.println(location + " have now " + newGarageLimit + "parking spots.");
     }
 
     public String getLocation() {
@@ -69,4 +85,25 @@ public class Garage implements Serializable {
         this.parkedVehicles.remove(vehicle);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Garage : ");
+        sb.append(location + " [ " + parkedVehicles.size() + "/" + garageLimit + " ]");
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Garage garage = (Garage) o;
+        return Objects.equals(garageLimit, garage.garageLimit) &&
+                Objects.equals(location, garage.location) &&
+                Objects.equals(parkedVehicles, garage.parkedVehicles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(garageLimit, location, parkedVehicles);
+    }
 }

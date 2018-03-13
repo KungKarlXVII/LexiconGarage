@@ -3,20 +3,20 @@ package se.lexicon.controller;
 import se.lexicon.model.*;
 import se.lexicon.utilities.Utilities;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Scanner;
 
 public class GarageHandler {
 
+    private List<Vehicle> knownVehicles;
     private List<Garage> availableGarages;
     private Garage activeGarage;
-
-    private List<Vehicle> knownVehicles;
 
     public GarageHandler() {
         this.knownVehicles = new ArrayList<>();
         this.availableGarages = new ArrayList<>();
-        setUpExampleStartingGarage();
-        availableGarages.add(activeGarage);
     }
 
     private void setUpExampleStartingGarage() {
@@ -25,9 +25,13 @@ public class GarageHandler {
             newGarage.setGarageLimit(5);
             newGarage.setLocation("Globen");
             this.activeGarage = newGarage;
+            this.availableGarages.add(activeGarage);
         }
     }
 
+    /**
+     * Print information about the cars and available parking spots in the garage.
+     */
     public void showGarageInventory() {
         System.out.println("Printing " + activeGarage.getLocation() + "'s current inventory...");
         System.out.println(activeGarage.getParkedVehicles().size() + "/" + activeGarage.getGarageLimit() + " spots used");
@@ -77,6 +81,7 @@ public class GarageHandler {
      */
     private Vehicle setupNewVehicle(Scanner scan) throws Exception {
 
+        // Set up reference to vehicle to build on.
         Vehicle newVehicle = null;
 
         // Begin with entering regNo. If regNo present in knownVehicles no setup is needed.
@@ -86,98 +91,98 @@ public class GarageHandler {
         // Optional return from method, if present use that vehicle and return.
         if(getVehicleFromKnownList(regNo).isPresent()) {
             Vehicle existingVehicle = getVehicleFromKnownList(regNo).get();
-            System.out.println(existingVehicle);
+            System.out.println("Found vehicle in database... Using " + existingVehicle);
             return existingVehicle;
         }
 
-        // Create a vehicle by type of Enum
-        VehicleType createType = VehicleType.UNKNOWN;
-        System.out.print("Enter vehicle type: ");
-        String type = scan.next();
 
-        switch(type.toLowerCase()) {
-            case "car":
-                createType = VehicleType.CAR;
-                newVehicle = new Car();
-                break;
-            case "bus":
-                createType = VehicleType.BUS;
-                newVehicle = new Bus();
-                break;
-            case "boat":
-                createType = VehicleType.BOAT;
-                newVehicle = new Boat();
-                break;
-            case "airplane":
-                createType = VehicleType.AIRPLANE;
-                newVehicle = new Airplane();
-                break;
-            case "motorcycle":
-                createType = VehicleType.MOTORCYCLE;
-                newVehicle = new MotorCycle();
-                break;
-            default:
-                System.out.println("Unknown vehicle type...");
-                throw new Exception("Vehicle type not set up properly...");
+        // Create a vehicle by type of Enum
+        int index = 0;
+        System.out.print("Enter vehicle type: ");
+
+        // Iterate all the available types
+        for(VehicleType type : VehicleType.values()) {
+            System.out.print("[" + index++ + "] " + type + " ");
         }
 
-        // Setup type for created object.
-        newVehicle.setType(createType);
-        newVehicle.setNumberOfRegistration(regNo);
+        String option = scan.next();
 
-        // If type is set up, we can be specific here
-        // Ask for brand of vehicle for later.
-        System.out.print("Vehicle is of brand: ");
-        String brand = scan.next();
-        newVehicle.setBrand(brand);
+        VehicleType createType = null;
 
-        // Ask for model of vehicle for later.
-        System.out.print("Vehicle is of model: ");
-        String model = scan.next();
-        newVehicle.setModel(model);
-
-        // Ask for specific information according to vehicle type.
+        /*
+         * Up-cast on creation to set unique properties.
+         */
         try {
 
-            switch(newVehicle.getType()) {
-                case CAR:
+            switch(option) {
+
+                case "0":
+                    createType = VehicleType.CAR;
+                    newVehicle = new Car();
+
                     System.out.print("Fill in number of doors on your car: ");
                     Car car = (Car) newVehicle;
                     car.setNumberOfDoors(Integer.parseInt(scan.next()));
                     break;
 
-                case BUS:
+                case "1":
+                    createType = VehicleType.BUS;
+                    newVehicle = new Bus();
+
                     System.out.print("Fill in total passenger capacity: ");
                     Bus bus = (Bus) newVehicle;
                     bus.setNumberOfPassengerSeats(Integer.parseInt(scan.next()));
                     break;
 
-                case BOAT:
+                case "2":
+                    createType = VehicleType.BOAT;
+                    newVehicle = new Boat();
+
                     System.out.print("Fill in total motor effect (HP): ");
                     Boat boat = (Boat) newVehicle;
                     boat.setHorsePower(Integer.parseInt(scan.next()));
                     break;
 
-                case AIRPLANE:
+                case "3":
+                    createType = VehicleType.AIRPLANE;
+                    newVehicle = new Airplane();
+
                     System.out.print("Fill in number of engines: ");
                     Airplane airplane = (Airplane) newVehicle;
                     airplane.setNumberOfEngines(Integer.parseInt(scan.next()));
                     break;
 
-                case MOTORCYCLE:
+                case "4":
+                    createType = VehicleType.MOTORCYCLE;
+                    newVehicle = new MotorCycle();
+
                     System.out.print("Fill in top speed: ");
                     MotorCycle mc = (MotorCycle) newVehicle;
                     mc.setTopSpeed(Integer.parseInt(scan.next()));
                     break;
 
-                case UNKNOWN:
-                    break;
+                default:
+                    System.out.println("Unknown vehicle type...");
+                    throw new Exception("Vehicle type not set up properly...");
             }
 
         } catch (Exception e) {
-            System.out.println("Something went wrong...");
             e.printStackTrace();
         }
+
+        // Attach type for created object.
+        newVehicle.setType(createType);
+        newVehicle.setNumberOfRegistration(regNo);
+
+        // Vehicle brand
+        System.out.print("Vehicle is of brand: ");
+        String brand = scan.next();
+        newVehicle.setBrand(brand);
+
+        // Vehicle Model
+        System.out.print("Vehicle is of model: ");
+        String model = scan.next();
+        newVehicle.setModel(model);
 
         addToKnownVehicles(newVehicle);
         return newVehicle;
@@ -186,12 +191,9 @@ public class GarageHandler {
 
     /**
      * Park vehicle in active garage.
-     * Enter registration number and get vehicle from already knownVehicles
-     * or create a new vehicle and park it.
+     * Uses setupNewVehicle to create a new Vehicle or fetch existing one from knownVehicles.
      *
-     * Vehicle Types: CAR, BUS, BOAT, AIRPLANE, MOTORCYCLE
-     *
-     * @param scan
+     * @param scan The scanner used to control the application
      */
     public void parkVehicle(Scanner scan) {
         if(activeGarage.getParkedVehicles().size() >= activeGarage.getGarageLimit()) {
@@ -207,8 +209,13 @@ public class GarageHandler {
             e.printStackTrace();
         }
 
-        if(parkingVehicle == null || parkingVehicle.isParked()) {
-            System.out.println("Vehicle invalid or already parked");
+        if( parkingVehicle == null) {
+            System.out.println("Vehicle invalid");
+            return;
+        }
+
+        if( parkingVehicle.isParked() ) {
+            System.out.println("Vehicle is already parked somewhere.");
             return;
         }
 
@@ -216,6 +223,11 @@ public class GarageHandler {
         System.out.println(parkingVehicle + " have been parked to the garage");
     }
 
+
+    /**
+     * Remove vehicle from active garage and set isParked to false
+     * @param scan
+     */
     public void unparkVehicle(Scanner scan) {
 
         if(activeGarage.getParkedVehicles().size() == 0) {
@@ -230,17 +242,20 @@ public class GarageHandler {
 
         System.out.print("What vehicle do you want to unpark? ");
         Vehicle whatVehicle = activeGarage.getParkedVehicles().get(Integer.parseInt(scan.next()));
+
         activeGarage.unParkVehicle(whatVehicle);
 
         System.out.println(whatVehicle + " have been unparked from " + activeGarage.getLocation());
     }
 
 
-
+    /**
+     * Print out all the known vehicles along with current parking status.
+     */
     public void listAllKnownVehicles() {
         System.out.println("----------------");
         for(Vehicle vehicle : knownVehicles) {
-            System.out.println(vehicle);
+            System.out.println(vehicle + ", parking status: " + vehicle.isParked());
             System.out.println("----------------");
         }
     }
@@ -248,7 +263,7 @@ public class GarageHandler {
     /**
      * Selects an active garage from index in availableGarages.
      * Uses scanner to select the index after iterating over all locations.
-     * @param scan
+     * @param scan The scanner used to control the application
      */
     public void selectActiveGarage(Scanner scan) {
         int index = 0;
@@ -271,7 +286,7 @@ public class GarageHandler {
      * Makes the newly created garage the active one at method end.
      * Fill in location name and total available parking spots.
      *
-     * @param scan
+     * @param scan The scanner used to control the application
      */
     public void openNewGarage(Scanner scan) {
 
@@ -282,17 +297,11 @@ public class GarageHandler {
         newGarage.setLocation(garageLocation);
 
         System.out.print("How many parking spots are there? ");
-        boolean isSuccess = false;
-        while(!isSuccess) {
-
-            try {
-                Integer garageLimit = Integer.parseInt(scan.next());
-                newGarage.setGarageLimit(garageLimit);
-                isSuccess = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+        try {
+            Integer garageLimit = Integer.parseInt(scan.next());
+            newGarage.setGarageLimit(garageLimit);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         availableGarages.add(newGarage);
@@ -301,15 +310,30 @@ public class GarageHandler {
         System.out.println("Active garage is now : " + activeGarage.getLocation());
     }
 
+    /**
+     * Save the knownVehicles and the garage lists to file.
+     * Project-root : garage.tmp
+     * Project-root : vehicle.tmp
+     */
     public void saveInventory() {
-        Utilities.saveInventory(availableGarages);
-        Utilities.saveKnownVehicles(knownVehicles);
+        Utilities.save(availableGarages, "garage.tmp");
+        Utilities.save(knownVehicles, "vehicle.tmp");
     }
 
+
+    /**
+     * Load up the knownVehicles and all the garage lists from file.
+     * Project-root : garage.tmp
+     * Project-root : vehicle.tmp
+     */
     public void loadInventory() {
-        this.availableGarages = Utilities.loadInventory();
-        this.knownVehicles = Utilities.loadKnownVehicles();
-        this.activeGarage = availableGarages.get(0);
-    }
+        this.availableGarages = Utilities.load("garage.tmp");
+        this.knownVehicles = Utilities.load("vehicle.tmp");
 
+        if(!availableGarages.isEmpty()) {
+            this.activeGarage = availableGarages.get(0);
+        } else {
+            setUpExampleStartingGarage();
+        }
+    }
 }
