@@ -42,9 +42,8 @@ public class GarageHandler {
         }
     }
 
-
     /**
-     * Add vehicle to knownVehicles for future referencing.
+     * Add vehicle to knownVehicles for future reference.
      * @param vehicle
      * @throws Exception
      */

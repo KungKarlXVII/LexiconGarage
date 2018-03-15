@@ -9,6 +9,29 @@ public class UI {
 
     private GarageHandler handler = new GarageHandler();
 
+    /**
+     * Plain prints the start menu to the UI.
+     * Nothing to see here.
+     *
+     */
+    public void printStartMenu() {
+
+        StringBuilder sb = new StringBuilder("Start Menu - \n");
+        sb.append("1. Show parked vehicles in active garage\n");
+        sb.append("2. Park vehicle in active garage\n");
+        sb.append("3. Unpark vehicle from active garage\n");
+        sb.append("4. --- \n");
+        sb.append("5. --- \n");
+        sb.append("6. --- \n");
+        sb.append("7. List all known vehicles \n");
+        sb.append("8. Select active garage \n");
+        sb.append("9. Open new Garage \n");
+        sb.append("0. Exit Program\n");
+
+        System.out.println(sb.toString());
+
+    }
+
     public void start() {
 
         // Program-loop
@@ -21,7 +44,7 @@ public class UI {
 
             do {
 
-                Utilities.printStartMenu();
+                printStartMenu();
                 String keyboard = scanner.next();
 
                 switch(keyboard) {
@@ -65,7 +88,6 @@ public class UI {
                         System.out.println(keyboard + " is an invalid menu option. \nPlease try again...");
                         break;
                 }
-
 
             } while(isRunning);
 

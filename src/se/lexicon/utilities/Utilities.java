@@ -8,40 +8,16 @@ public class Utilities {
 
     private Utilities() {} // Make Utilities constructor private.
 
-
-    /**
-     * Plain prints the start menu to the UI.
-     * Nothing to see here.
-     *
-     */
-    public static void printStartMenu() {
-
-        StringBuilder sb = new StringBuilder("Start Menu - \n");
-        sb.append("1. Show parked vehicles in active garage\n");
-        sb.append("2. Park vehicle in active garage\n");
-        sb.append("3. Unpark vehicle from active garage\n");
-        sb.append("4. --- \n");
-        sb.append("5. --- \n");
-        sb.append("6. --- \n");
-        sb.append("7. List all known vehicles \n");
-        sb.append("8. Select active garage \n");
-        sb.append("9. Open new Garage \n");
-        sb.append("0. Exit Program\n");
-
-        System.out.println(sb.toString());
-
-    }
-
     /**
      * Generic save method for Lists. Writes to file in project root.
      * Specify filename and which list to save.
-     * <T> implements Serializable
+     * <T> implements Serializable. This allows us to target the List object which
      * @param inventory
      * @param filename
-     * @param <T>
+     * @param <E>
      */
 
-    public static <T> void save(List<T> inventory, String filename) {
+    public static <E> void save(List<E> inventory, String filename) {
         try (FileOutputStream fos = new FileOutputStream(filename)) {
             try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
                 oos.writeObject(inventory);
@@ -56,18 +32,18 @@ public class Utilities {
 
     /**
      * Generic load method. Loads from file in project root.
-     * <T> implements Serializable
+     * <T> implements Serializable.
      * @param filename
-     * @param <T>
+     * @param <E>
      * @return
      */
 
-    public static <T> List<T> load(String filename) {
-        List<T> inventory = new ArrayList<>();
+    public static <E> List<E> load(String filename) {
+        List<E> inventory = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(filename)) {
 
             try (ObjectInputStream ois = new ObjectInputStream(fis)) {
-                inventory = (List<T>) ois.readObject();
+                inventory = (List<E>) ois.readObject();
             }
 
         } catch (FileNotFoundException fnf){
