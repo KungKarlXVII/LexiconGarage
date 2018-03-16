@@ -11,7 +11,7 @@ public class Utilities {
     /**
      * Generic save method for Lists. Writes to file in project root.
      * Specify filename and which list to save.
-     * <T> implements Serializable. This allows us to target the List object which
+     * <T> implements Serializable. This allows us to target the List object which in itself is serializable.
      * @param inventory
      * @param filename
      * @param <E>
@@ -41,11 +41,11 @@ public class Utilities {
     public static <E> List<E> load(String filename) {
         List<E> inventory = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(filename)) {
-
             try (ObjectInputStream ois = new ObjectInputStream(fis)) {
-                inventory = (List<E>) ois.readObject();
-            }
 
+                inventory = (List<E>) ois.readObject();
+
+            }
         } catch (FileNotFoundException fnf){
             System.out.println("Error finding inventory file " + filename);
 

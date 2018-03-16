@@ -1,4 +1,4 @@
-package se.lexicon;
+package se.lexicon.application;
 
 import se.lexicon.ui.UI;
 

@@ -25,7 +25,6 @@ public class Boat extends Vehicle {
     @Override
     public void getInformation() {
         System.out.println("Printing information from Boat class...");
-        System.out.println(getBrand() + " " + getModel() + ", reg-no: " + getNumberOfRegistration());
-        System.out.println(getNumberOfWheels() + " wheels, " + horsePower + " HP.");
+        System.out.println(super.toString() + "\n" + getNumberOfWheels() + " wheels, " + horsePower + " horse power.");
     }
 }

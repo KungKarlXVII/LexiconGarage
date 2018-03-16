@@ -38,7 +38,7 @@ public class Garage implements Serializable {
             return;
         }
         this.garageLimit = newGarageLimit;
-        System.out.println(location + " have now " + newGarageLimit + "parking spots.");
+        System.out.println(location + " now have " + newGarageLimit + " parking spots.");
     }
 
     public String getLocation() {

@@ -27,7 +27,6 @@ public class Car extends Vehicle {
     @Override
     public void getInformation() {
         System.out.println("Printing information from Car class...");
-        System.out.println(getBrand() + " " + getModel() + ", reg-no: " + getNumberOfRegistration());
-        System.out.println(getNumberOfWheels() + " wheels, " + numberOfDoors + " doors.");
+        System.out.println(super.toString() + "\n" + getNumberOfWheels() + " wheels, " + numberOfDoors + " doors.");
     }
 }

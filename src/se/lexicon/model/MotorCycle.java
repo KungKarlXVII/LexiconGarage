@@ -26,7 +26,6 @@ public class MotorCycle extends Vehicle {
     @Override
     public void getInformation() {
         System.out.println("Printing information from MotorCycle class...");
-        System.out.println(getBrand() + " " + getModel() + ", reg-no: " + getNumberOfRegistration());
-        System.out.println(getNumberOfWheels() + " wheels, " + topSpeed + " total top speed.");
+        System.out.println(super.toString() + "\n" + getNumberOfWheels() + " wheels, " + topSpeed + " total top speed.");
     }
 }

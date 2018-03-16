@@ -26,7 +26,6 @@ public class Airplane extends Vehicle {
     @Override
     public void getInformation() {
         System.out.println("Printing information from Airplane class...");
-        System.out.println(getBrand() + " " + getModel() + ", reg-no: " + getNumberOfRegistration());
-        System.out.println(getNumberOfWheels() + " wheels, " + numberOfEngines + " number of engines.");
+        System.out.println(super.toString() + "\n" + getNumberOfWheels() + " wheels, " + numberOfEngines + " number of engines.");
     }
 }

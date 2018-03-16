@@ -9,10 +9,9 @@ public class UI {
 
     private GarageHandler handler = new GarageHandler();
 
+
     /**
-     * Plain prints the start menu to the UI.
-     * Nothing to see here.
-     *
+     * Prints the available options to console by using StringBuilder and '\n' newline character.
      */
     public void printStartMenu() {
 
@@ -29,15 +28,22 @@ public class UI {
         sb.append("0. Exit Program\n");
 
         System.out.println(sb.toString());
-
     }
 
+
+    /**
+     * Starts the applications UI with a Scanner that receives all user input.
+     * EXITS on GarageHandler-thrown Exceptions or when chosen from menu.
+     * Exits gracefully and saves current inventory.
+     */
     public void start() {
 
         // Program-loop
         boolean isRunning = true;
 
-        // Try-with-resources for automatic closing of scanner
+        // Scanner implements AutoClosable interface so we can use try-with-resources to automatically
+        // handle the closing of the scanner.
+
         try (Scanner scanner = new Scanner(System.in)) {
 
             handler.loadInventory();
@@ -47,55 +53,58 @@ public class UI {
                 printStartMenu();
                 String keyboard = scanner.next();
 
-                switch(keyboard) {
+                switch (keyboard) {
 
                     case "1":
                         handler.showGarageInventory();
                         break;
 
                     case "2":
-                        handler.parkVehicle(scanner);
+                        handler.parkVehicle( scanner );
                         break;
 
                     case "3":
-                        handler.unparkVehicle(scanner);
+                        handler.unparkVehicle( scanner );
                         break;
 
 
-
-
                     case "7":
-                        System.out.println("List all known vehicles");
+                        System.out.println( "List all known vehicles" );
                         handler.listAllKnownVehicles();
                         break;
 
                     case "8":
-                        System.out.println("Select active garage");
-                        handler.selectActiveGarage(scanner);
+                        System.out.println( "Select active garage" );
+                        handler.selectActiveGarage( scanner );
                         break;
 
                     case "9":
-                        System.out.println("Opening up new garage location...");
-                        handler.openNewGarage(scanner);
+                        System.out.println( "Opening up new garage location..." );
+                        handler.openNewGarage( scanner );
                         break;
 
                     case "0":
-                        System.out.println("Exiting program...");
+                        System.out.println( "Exiting program..." );
                         isRunning = false;
                         break;
 
                     default:
-                        System.out.println(keyboard + " is an invalid menu option. \nPlease try again...");
+                        System.out.println( keyboard + " is an invalid menu option. \nPlease try again..." );
                         break;
                 }
 
-            } while(isRunning);
+            } while (isRunning);
+
+        // Additional more specific exceptions should be caught here for more specific error messaging.
 
         } catch (Exception e) {
             System.out.println("Error: Something went wrong... " + e.getMessage() + ".");
-        }
 
-        handler.saveInventory();
+        } finally {
+            handler.saveInventory();
+            System.out.println("Saving inventory... Thank you for using LexiconGarage 1.0");
+
+        }
 
     }
 

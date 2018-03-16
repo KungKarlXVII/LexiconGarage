@@ -27,7 +27,6 @@ public class Bus extends Vehicle {
     @Override
     public void getInformation() {
         System.out.println("Printing information from Bus class...");
-        System.out.println(getBrand() + " " + getModel() + ", reg-no: " + getNumberOfRegistration());
-        System.out.println(getNumberOfWheels() + " wheels, " + numberOfPassengerSeats + " passenger seats.");
+        System.out.println(super.toString() + "\n" + getNumberOfWheels() + " wheels, " + numberOfPassengerSeats + " passenger seats.");
     }
 }
